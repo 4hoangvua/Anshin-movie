@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import movieAPI from "../Services/movieAPI";
 import { token } from "../Services/token";
+import { notificationMove } from "../components/NotificationMove";
 let user = null;
 if (localStorage.getItem("user")) {
   user = JSON.parse(localStorage.getItem("user"));
@@ -25,15 +26,18 @@ export const userRegister = createAsyncThunk(
 );
 export const getInfoUser = createAsyncThunk(
   "userLogin/getInfoUser",
-  async (account) => {
-    const data = await movieAPI.getInfoUser(account);
+  async () => {
+    const data = await movieAPI.getInfoUser();
     return data;
   }
 );
 export const updateInfoUser = createAsyncThunk(
   "userLogin/updateInfoUser",
   async (data) => {
-    return await movieAPI.updateInfoUser(data);
+    data.setLoading(true);
+    const respone = await movieAPI.updateInfoUser(data.values);
+    data.setLoading(false);
+    return respone;
   }
 );
 const userSlice = createSlice({
@@ -55,22 +59,22 @@ const userSlice = createSlice({
     [userLoginActive.fulfilled]: (state, { payload }) => {
       state.userLogin = payload;
       localStorage.setItem("user", JSON.stringify(payload));
-      alert("Đăng nhập thành công");
+      notificationMove("success", "Đăng nhập thành công");
     },
-    [userLoginActive.rejected]: (state, { payload }) => {
-      alert("Tài khoản hoặc mật khẩu không chính xác !");
+    [userLoginActive.rejected]: (state, { error }) => {
+      notificationMove("error", error.message);
     },
     [userRegister.fulfilled]: () => {
-      alert("Đăng ký thành công");
+      notificationMove("success", "Đăng ký thành công");
     },
-    [userRegister.rejected]: (state, { payload }) => {
-      alert("Tài khoản hoặc email đã tồn tại");
+    [userRegister.rejected]: (state, { error }) => {
+      notificationMove("error", error.message);
     },
     [getInfoUser.fulfilled]: (state, { payload }) => {
       state.infoUser = payload;
     },
-    [getInfoUser.rejected]: (state, { payload }) => {
-      state.userLogin = { ...state.userLogin, accessToken: token };
+    [getInfoUser.rejected]: (state, { error }) => {
+      notificationMove("error", error.message);
     },
     [updateInfoUser.fulfilled]: (state, { payload }) => {
       const data = [...state.infoUser.thongTinDatVe];
@@ -82,12 +86,12 @@ const userSlice = createSlice({
         soDT: payload.soDT,
       };
       localStorage.setItem("user", JSON.stringify(state.userLogin));
-      alert("Cập nhật thành công");
+      notificationMove("success", "Cập nhật thành công");
     },
-    [updateInfoUser.rejected]: (state, { payload }) => {
-      alert("Lỗi");
+    [updateInfoUser.rejected]: (state, { error }) => {
+      notificationMove("error", error.message);
     },
   },
 });
-export const { deleteUserLoginAdmin, resetToken } = userSlice.actions;
+export const { deleteUserLoginAdmin } = userSlice.actions;
 export default userSlice.reducer;

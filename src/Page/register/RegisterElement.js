@@ -19,7 +19,7 @@ export const ContainerLogin = styled.div`
 `;
 export const CLogin = styled.div`
   width: 18rem;
-  height: 44rem;
+  height: auto;
 `;
 export const Form = styled.form`
   background-color: #fff;
@@ -27,7 +27,7 @@ export const Form = styled.form`
   height: 100%;
   flex-direction: column;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 export const CClose = styled(Link)`
@@ -78,7 +78,7 @@ const Input = styled.input`
   font-size: small;
   padding-left: 1.875rem;
   width: 13.125rem;
-
+  margin-bottom: 1rem;
   border-radius: 0.625rem;
   border: transparent;
   background: #e9e8ec;
@@ -107,6 +107,7 @@ export const Button = styled.button`
 `;
 export const Titile = styled.h3`
   font-size: 1rem;
+  font-weight: 600;
 `;
 export const Footer = styled.p`
   font-size: small;

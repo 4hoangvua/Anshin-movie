@@ -49,13 +49,11 @@ const movieAPI = {
       ...info,
     });
   },
-  getInfoUser: (account) => {
-    return axiosClient.post(
-      `QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${account}`
-    );
+  getInfoUser: () => {
+    return axiosClient.post(`QuanLyNguoiDung/ThongTinTaiKhoan`);
   },
   updateInfoUser: (data) => {
-    return axiosClient.post("QuanLyNguoiDung/CapNhatThongTinNguoiDung", data);
+    return axiosClient.put("QuanLyNguoiDung/CapNhatThongTinNguoiDung", data);
   },
   getInfoTicket: (timeTheater) => {
     return axiosClient.get("QuanLyDatVe/LayDanhSachPhongVe", {

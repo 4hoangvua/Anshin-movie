@@ -29,8 +29,9 @@ import {
   ItemHour,
 } from "./InfoTicketElement";
 import ModalCheck from "../../../components/modals/ModalCheck";
-import { actionBooking, getInfoTicket } from "../../../reducers/ticket";
-const InfoTicket = ({ ticketInfo, id }) => {
+import { actionBooking } from "../../../reducers/ticket";
+import { notificationMove } from "../../../components/NotificationMove";
+const InfoTicket = ({ ticketInfo, id, setLoading }) => {
   const { priceTicket, chair, selectedSeat } = useSelector(
     (state) => state.ticket
   );
@@ -47,13 +48,14 @@ const InfoTicket = ({ ticketInfo, id }) => {
   };
   const handleTicket = () => {
     const data = {
-      maLichChieu: ticketInfo.maLichChieu,
+      maLichChieu: ticketInfo.maLichChieu.toString(),
       danhSachVe: [],
     };
     for (let seat of selectedSeat) {
-      data.danhSachVe.push({ maGhe: seat.maGhe, giaVe: seat.giaVe });
+      data.danhSachVe.push(seat);
     }
-    dispatch(actionBooking(data));
+    console.log(data);
+    dispatch(actionBooking({ data, id, setLoading }));
   };
   return (
     <ContainterInfo>
@@ -75,9 +77,7 @@ const InfoTicket = ({ ticketInfo, id }) => {
       <CTimeShow>
         <TimeShow>Ngày giờ chiếu:</TimeShow>
         <TimeShowDetail>
-          <ItemDate>
-            {dayjs(ticketInfo.ngayChieu).format("DD/MM/YYYY")}
-          </ItemDate>
+          <ItemDate>{ticketInfo.ngayChieu}</ItemDate>
           <ItemHour>{" ~ " + ticketInfo.gioChieu}</ItemHour>
         </TimeShowDetail>
       </CTimeShow>
@@ -96,15 +96,12 @@ const InfoTicket = ({ ticketInfo, id }) => {
         {userLogin !== null ? (
           isCheck ? (
             <>
-              <ModalCheck
-                showModal={showModal}
-                setShowModal={setShowModal}
-                ticket={true}
-              >
-                Bạn đặt{" "}
-                {chair.length == 0 ? "" : "Ghế " + chair.join(" , Ghế ")} thành
-                công. Xem chi tiết tại Login !
-              </ModalCheck>
+              {notificationMove(
+                "success",
+                `Bạn đặt
+                ${chair.length == 0 ? "" : "Ghế " + chair.join(" , Ghế ")} thành
+                công. Xem chi tiết tại tài khoản!`
+              )}
             </>
           ) : (
             <ModalCheck showModal={showModal} setShowModal={setShowModal}>

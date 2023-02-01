@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import movieAPI from "../Services/movieAPI";
-
+import { notificationMove } from "../components/NotificationMove";
 const initialState = {
   listMovie: [],
+  totalPages: [],
 };
 
 export const getListMovie = createAsyncThunk(
@@ -23,6 +24,14 @@ const listMovie = createSlice({
   extraReducers: {
     [getListMovie.fulfilled]: (state, { payload }) => {
       state.listMovie = payload.items;
+      let newArray = [];
+      for (let index = 1; index <= payload.totalPages; index++) {
+        newArray.push(index);
+      }
+      state.totalPages = newArray;
+    },
+    [getListMovie.rejected]: (state, { error }) => {
+      notificationMove("error", error.message);
     },
   },
 });

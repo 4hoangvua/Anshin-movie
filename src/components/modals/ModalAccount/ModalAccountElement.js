@@ -19,18 +19,17 @@ export const Background = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 `;
 export const CModalAccount = styled.div`
-  position: relative;
+  position: absolute;
   width: 80vw;
-  height: 80vh;
+  height: 90vh;
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
   background: #63637a;
   opacity: 0.8;
   border-radius: 0.625rem;
   color: #fff;
+  overflow: hidden;
 `;
 export const ReactAccount = styled.div`
   display: flex;
@@ -46,10 +45,12 @@ export const ContenAccount = styled.div`
 export const ContentHistory = styled.div`
   height: 50%;
   width: 100%;
-  overflow-y: auto;
 `;
 export const CColHis = styled.div`
   height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  margin-bottom: 1rem;
 `;
 export const Row = styled.div`
   margin-top: 2rem;

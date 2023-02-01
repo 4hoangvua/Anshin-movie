@@ -35,8 +35,10 @@ const ModalAccount = () => {
   const { taiKhoan } = useParams();
   const { infoUser, userLogin } = useSelector((state) => state.sig);
   const [isPassword, setIsPassword] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const isRef = useRef(false);
+  const numberChair = useRef([]);
   useEffect(() => {
     dispatch(getInfoUser(taiKhoan));
   }, [userLogin]);
@@ -53,11 +55,7 @@ const ModalAccount = () => {
     setValue("soDt", infoUser.soDT);
     setValue("maLoaiNguoiDung", infoUser.maLoaiNguoiDung);
   }, [infoUser]);
-  useEffect(() => {
-    return () => {
-      dispatch(resetToken());
-    };
-  }, []);
+
   const schema = object({
     taiKhoan: string()
       .required("Tài khoản không được để trống")
@@ -92,7 +90,7 @@ const ModalAccount = () => {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (values) => {
-    dispatch(updateInfoUser(values));
+    dispatch(updateInfoUser({ values, setLoading }));
   };
 
   if (Object.keys(infoUser).length === 0) return;
@@ -111,6 +109,7 @@ const ModalAccount = () => {
                   <Col>
                     <LogoAccount />
                     <Name
+                      readOnly={true}
                       type="text"
                       placeholder="Account"
                       {...register("taiKhoan")}
@@ -125,12 +124,20 @@ const ModalAccount = () => {
                       type={isPassword ? "password" : "text"}
                       placeholder="Password"
                       {...register("matKhau")}
+                      style={{ marginBottom: 5 }}
                     />
-                    <input
-                      type="checkbox"
-                      onClick={() => setIsPassword(!isPassword)}
-                    />
-                    <small className="fs-6"> Show password</small>
+                    <div className="d-flex  align-items-center mb-2">
+                      <input
+                        type="checkbox"
+                        onClick={() => setIsPassword(!isPassword)}
+                      />
+                      <span
+                        style={{ fontSize: 10, width: "100%", marginLeft: 5 }}
+                      >
+                        {" "}
+                        Show password
+                      </span>
+                    </div>
                     {errors.matKhau && (
                       <ErrorSpan>{errors.matKhau?.message}</ErrorSpan>
                     )}
@@ -178,7 +185,22 @@ const ModalAccount = () => {
                     />
                   </Col>
                   <Col className="d-flex justify-content-end">
-                    <Button>Update</Button>
+                    {loading ? (
+                      <button
+                        className="btn btn-primary"
+                        type="button"
+                        disabled
+                      >
+                        <span
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Update
+                      </button>
+                    ) : (
+                      <button className="btn btn-primary">Update</button>
+                    )}
                   </Col>
                 </Row>
               </form>
@@ -186,61 +208,115 @@ const ModalAccount = () => {
             <ContentHistory className="text-center">
               <h3 className=" w-100">Lịch sử đặt vé</h3>
               <CColHis>
-                <div className="row d-md-flex text-dark justify-content-md-center w-100">
-                  {infoUser?.thongTinDatVe.map((user, index) => {
-                    return (
-                      <div
-                        className="col-sm-4 card p-2 text-center"
-                        key={user.maVe}
-                      >
-                        <div>
-                          <img
-                            className="card-img-top "
-                            src={user.hinhAnh}
-                            alt={user.name}
-                            style={{ width: "10rem", height: "12rem" }}
-                          />
-                        </div>
-                        <div className="card-body">
-                          <h5 className="card-title text-danger">
-                            Tên Phim: {user.tenPhim}
-                          </h5>
-                          <h6 className="text-dark">
-                            Ngày đặt:{" "}
-                            {dayjs(user.ngayDat).format("DD/MM/YYYY ~ h:mm A")}
-                          </h6>
-                          <p className="text-success">
-                            Thời lượng: {user.thoiLuongPhim}, Giá vé:{" "}
-                            {user.giaVe}
-                          </p>
-                          {user.danhSachGhe.map((lt, index) => {
-                            if (index === 0) {
-                              return (
-                                <div className="text-warning" key={index}>
-                                  <h4>Tên rạp: {lt.tenHeThongRap}</h4>
-                                  <p>{lt.tenRap}</p>
-                                  <span className="text-primary">
-                                    Ghế {lt.tenGhe},
-                                  </span>
-                                </div>
-                              );
-                            } else {
-                              return (
-                                <span className="text-primary" key={index}>
-                                  Ghế {lt.tenGhe},
-                                </span>
-                              );
-                            }
-                          })}
-
-                          <a href="#" className="btn btn-primary d-block">
-                            Go somewhere
-                          </a>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <table
+                  id="dtVerticalScrollExample"
+                  className="table table-dark w-100 table-hover"
+                  style={{ verticalAlign: "unset" }}
+                >
+                  <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                    <tr>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Minh Họa
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Tên phim
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Ngày đặt
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Thời lượng
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Giá vé
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Tên hệ thống rạp
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Tên rạp
+                      </th>
+                      <th style={{ position: "sticky", top: 0, zIndex: 1 }}>
+                        Ghế
+                      </th>
+                    </tr>
+                  </thead>
+                  {infoUser.thongTinDatVe.length > 0 ? (
+                    <tbody>
+                      {infoUser?.thongTinDatVe.map((user, index) => {
+                        numberChair.current = [];
+                        return (
+                          <tr key={user.maVe}>
+                            <td>
+                              <img
+                                src={user.hinhAnh}
+                                alt={user.name}
+                                style={{
+                                  width: "5rem",
+                                  height: "7rem",
+                                  objectFit: "cover",
+                                }}
+                              />
+                            </td>
+                            <td className="text-danger">{user.tenPhim}</td>
+                            <td className="text-white">
+                              {dayjs(user.ngayDat).format(
+                                "DD/MM/YYYY ~ h:mm A"
+                              )}
+                            </td>
+                            <td className="text-success">
+                              {user.thoiLuongPhim}'
+                            </td>
+                            <td>{user.giaVe}</td>
+                            {user.danhSachGhe.map((lt, index) => {
+                              if (user.danhSachGhe?.length === 1) {
+                                return (
+                                  <React.Fragment key={index}>
+                                    <td className="text-warning">
+                                      {lt.tenHeThongRap}
+                                    </td>
+                                    <td>{lt.tenRap}</td>
+                                    <td className="text-primary">
+                                      {lt.tenGhe}
+                                    </td>
+                                  </React.Fragment>
+                                );
+                              } else {
+                                numberChair.current.push(lt.tenGhe);
+                                return (
+                                  <>
+                                    {index === 0 ? (
+                                      <React.Fragment key={index}>
+                                        <td className="text-warning">
+                                          {lt.tenHeThongRap}
+                                        </td>
+                                        <td>{lt.tenRap}</td>
+                                      </React.Fragment>
+                                    ) : index ===
+                                      user.danhSachGhe?.length - 1 ? (
+                                      <td className="text-primary">
+                                        {numberChair.current.join(", ")}
+                                      </td>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </>
+                                );
+                              }
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  ) : (
+                    ""
+                  )}
+                </table>
+                {infoUser.thongTinDatVe.length > 0 ? (
+                  ""
+                ) : (
+                  <div>Không có thông tin đặt vé</div>
+                )}
               </CColHis>
             </ContentHistory>
           </ReactAccount>

@@ -36,9 +36,7 @@ const GlobalStyles = createGlobalStyle`
         box-sizing: border-box;
         font-size: 16px;
         font-family: 'Encode Sans Expanded',sans-serif;
-        background: ${theme.bg.primary}
-        
-
+        background: ${theme.bg.primary};
     }
     html{
       @media ${device.laptopL}{
@@ -53,6 +51,7 @@ const GlobalStyles = createGlobalStyle`
       @media ${device.mobileL}{
         font-size: 0.5rem;
       } 
+      overflow: auto;
 
     }
 `;

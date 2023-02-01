@@ -14,7 +14,7 @@ export const ContainerLogin = styled.div`
 `;
 export const CLogin = styled.div`
   width: 16.25rem;
-  height: 29.375rem;
+  height: auto;
 `;
 export const Form = styled.form`
   background-color: #fff;
@@ -22,7 +22,7 @@ export const Form = styled.form`
   height: 100%;
   flex-direction: column;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 export const CClose = styled(Link)`
@@ -59,7 +59,7 @@ export const Name = styled.input`
   height: 2rem;
   font-size: medium;
   width: 13.125rem;
-
+  margin-bottom: 1rem;
   border-radius: 0.625rem;
   border: 0px solid;
   background: #e9e8ec;
@@ -75,7 +75,7 @@ export const Password = styled.input`
   font-size: small;
   padding-left: 1.875rem;
   width: 13.125rem;
-
+  margin-bottom: 1rem;
   border-radius: 0.625rem;
   border: transparent;
   background: #e9e8ec;
@@ -104,6 +104,7 @@ export const Button = styled.button`
 `;
 export const Titile = styled.h3`
   font-size: 1rem;
+  font-weight: 600;
 `;
 export const Footer = styled.p`
   font-size: small;

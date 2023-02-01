@@ -78,49 +78,51 @@ const Register = () => {
             <CClose to="/">
               <Close />
             </CClose>
-            <Titile>Login In Using Email</Titile>
-            <LoginNameAccount>
-              <LogoAccount />
-              <Name
-                type="text"
-                placeholder="Username"
-                {...register("taiKhoan")}
-              />
-              {errors.taiKhoan && (
-                <ErrorSpan>{errors.taiKhoan?.message}</ErrorSpan>
-              )}
-            </LoginNameAccount>
-            <LoginPassword>
-              <LogoPassword />
-              <Password
-                type="password"
-                placeholder="Passord"
-                {...register("matKhau")}
-              />
-              {errors.matKhau && (
-                <ErrorSpan>{errors.matKhau?.message}</ErrorSpan>
-              )}
-            </LoginPassword>
-            <LoginEmail>
-              <LogoEmail />
-              <Name type="email" placeholder="Email" {...register("email")} />
-              {errors.email && <ErrorSpan>{errors.email?.message}</ErrorSpan>}
-            </LoginEmail>
-            <LoginPhone>
-              <LogoPhone />
-              <Name type="text" placeholder="Phone" {...register("soDt")} />
-              {errors.soDt && <ErrorSpan>{errors.soDt?.message}</ErrorSpan>}
-            </LoginPhone>
-            <LoginName>
-              <LogoName />
-              <Name
-                type="text"
-                placeholder="First name"
-                {...register("hoTen")}
-              />
-              {errors.hoTen && <ErrorSpan>{errors.hoTen?.message}</ErrorSpan>}
-            </LoginName>
-            <Button>SignUp</Button>
+            <Titile>Sign up</Titile>
+            <div className="mt-3 mb-3">
+              <LoginNameAccount>
+                <LogoAccount />
+                <Name
+                  type="text"
+                  placeholder="Username"
+                  {...register("taiKhoan")}
+                />
+                {errors.taiKhoan && (
+                  <ErrorSpan>{errors.taiKhoan?.message}</ErrorSpan>
+                )}
+              </LoginNameAccount>
+              <LoginPassword>
+                <LogoPassword />
+                <Password
+                  type="password"
+                  placeholder="Passord"
+                  {...register("matKhau")}
+                />
+                {errors.matKhau && (
+                  <ErrorSpan>{errors.matKhau?.message}</ErrorSpan>
+                )}
+              </LoginPassword>
+              <LoginEmail>
+                <LogoEmail />
+                <Name type="email" placeholder="Email" {...register("email")} />
+                {errors.email && <ErrorSpan>{errors.email?.message}</ErrorSpan>}
+              </LoginEmail>
+              <LoginPhone>
+                <LogoPhone />
+                <Name type="text" placeholder="Phone" {...register("soDt")} />
+                {errors.soDt && <ErrorSpan>{errors.soDt?.message}</ErrorSpan>}
+              </LoginPhone>
+              <LoginName>
+                <LogoName />
+                <Name
+                  type="text"
+                  placeholder="First name"
+                  {...register("hoTen")}
+                />
+                {errors.hoTen && <ErrorSpan>{errors.hoTen?.message}</ErrorSpan>}
+              </LoginName>
+              <Button>SignUp</Button>
+            </div>
             <Footer>
               You have already account ?
               <SignIn to="/signin"> Signin now</SignIn>

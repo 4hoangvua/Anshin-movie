@@ -10,9 +10,9 @@ import {
 
 const ModalCheck = ({ children, showModal, setShowModal, lognin, ticket }) => {
   const handleClose = () => {
-    if (ticket) {
-      window.location.reload();
-    }
+    // if (ticket) {
+    //   window.location.reload();
+    // }
     setShowModal(!showModal);
   };
   return (

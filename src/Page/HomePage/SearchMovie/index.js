@@ -21,21 +21,16 @@ import {
 } from "./SearchMovieElement";
 const SearchMovie = () => {
   const { listTheaterInfo } = useSelector((state) => state.show);
-  const [isSelected, setIsSelected] = useState();
-  const [isMovie, setIsMovie] = useState();
-  const isMouted = useRef(false);
+  const [isSelected, setIsSelected] = useState([]);
+  const [isMovie, setIsMovie] = useState([]);
   const theater = useRef(0);
   const movie = useRef(0);
   useEffect(() => {
-    if (!isMouted.current) {
-      isMouted.current = true;
-      return;
-    }
-    setIsSelected(listTheaterInfo[theater.current].lstCumRap);
-    setIsMovie(
-      listTheaterInfo[theater.current].lstCumRap[movie.current].danhSachPhim
-    );
-  }, [listTheaterInfo]);
+    setIsSelected((pre) => [...listTheaterInfo[theater.current].lstCumRap]);
+    setIsMovie((pre) => [
+      ...listTheaterInfo[theater.current].lstCumRap[movie.current].danhSachPhim,
+    ]);
+  }, []);
   const handleSelected = (evt) => {
     theater.current = evt.target.value;
     setIsSelected(listTheaterInfo[theater.current].lstCumRap);

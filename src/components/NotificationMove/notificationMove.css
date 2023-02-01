@@ -1,0 +1,126 @@
+:root{
+  --dark: #34495E;
+  --light: #ffffff;
+  --success: #0ABF30;
+  --error: #E24D4C;
+  --warning: #E9BD0C;
+  --info: #3498DB;
+}
+.notification {
+  position: fixed;
+  top: 30px;
+  right: 20px;
+}
+.notification :where(.toastmove, .column){
+  display: flex;
+  align-items: center;
+}
+.notification .toastmove{
+  position: relative;
+  overflow: hidden;
+  list-style: none;
+  width: 400px;
+  border-radius: 4px;
+  padding: 16px 17px;
+  margin-bottom: 10px;
+  background-color: var(--light);
+  justify-content: space-between;
+  animation: show_toastmove 0.3s ease forwards;
+}
+@keyframes show_toastmove {
+  0% {
+    transform: translateX(100%);
+  }
+  40% {
+    transform: translateX(-5%);
+  }
+  80% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-10px);
+  }
+  
+}
+.notification .toastmove.hide{
+  animation: hide_toastmove 0.3s ease forwards;
+}
+@keyframes hide_toastmove {
+  0% {
+    transform: translateX(-10px);
+  }
+  40% {
+    transform: translateX(0%);
+  }
+  80% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(calc(100% + 20px));
+  }
+  
+}
+.toastmove::after{
+  position: absolute;
+  content: "";
+  height: 3px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  animation: progress 5s linear forwards;
+}
+@keyframes progress {
+  100%{
+    width: 0%;
+  }
+  
+}
+.toastmove.success::after, .btn#success{
+  background: var(--success);
+}
+.toastmove.error::after, .btn#error{
+  background: var(--error);
+}
+.toastmove.warning::after, .btn#warning{
+  background: var(--warning);
+}
+.toastmove.info::after, .btn#info{
+  background: var(--info);
+}
+.toastmove.success .column i{
+  color: var(--success);
+}
+.toastmove.error .column i{
+  color: var(--error);
+}
+.toastmove.warning .column i{
+  color: var(--warning);
+}
+.toastmove.info .column i{
+  color: var(--info);
+}
+.toastmove .column i{
+  font-size: 1.75rem;
+}
+
+.toastmove .column span{
+  font-size: 1.07rem;
+  margin-left: 12px;
+}
+.toastmove i:last-child {
+  color: #aeb0d7;
+  cursor: pointer;
+}
+.toastmove i:last-child:hover{
+  color: var(--dark);
+}
+
+.buttons .btn{
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 1.2rem;
+  margin: 0 5px;
+}

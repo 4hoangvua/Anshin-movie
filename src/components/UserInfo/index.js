@@ -8,7 +8,12 @@ const UserInfo = ({ userLogin }) => {
     <>
       <LogoLogout onClick={() => setShowModal(!showModal)} />
       <NavLink
-        style={{ textDecoration: "none", color: "unset" }}
+        style={{
+          textDecoration: "none",
+          color: "unset",
+          display: "block",
+          width: "100%",
+        }}
         to={`/history/${userLogin.taiKhoan}`}
       >
         <Name>{userLogin.hoTen}</Name>

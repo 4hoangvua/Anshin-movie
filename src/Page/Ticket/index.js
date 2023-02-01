@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InfoTicket from "./InfoTicket";
 import ListChair from "./ListChair";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,17 +13,21 @@ import {
   Nav,
   NavLogin,
 } from "./TicketElement";
-import { getInfoTicket } from "../../reducers/ticket";
+import { getInfoTicket, resetChair } from "../../reducers/ticket";
 import { useParams } from "react-router-dom";
 import UserInfo from "../../components/UserInfo";
+import PageLoad from "../../components/PageLoad";
 const Ticket = () => {
   const { tickets } = useSelector((state) => state.ticket);
   const { userLogin } = useSelector((state) => state.sig);
-
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getInfoTicket(id));
+    dispatch(getInfoTicket({ id, setLoading }));
+    return () => {
+      dispatch(resetChair());
+    };
   }, []);
   if (tickets.length === 0) return;
   return (
@@ -40,12 +44,22 @@ const Ticket = () => {
         )}
       </Nav>
       <ContainerTicket>
-        <ContainerListChair>
-          <ListChair ticketChair={tickets.danhSachGhe} />
-        </ContainerListChair>
-        <InfoTheater>
-          <InfoTicket ticketInfo={tickets.thongTinPhim} id={id} />
-        </InfoTheater>
+        {loading ? (
+          <PageLoad />
+        ) : (
+          <>
+            <ContainerListChair>
+              <ListChair ticketChair={tickets.danhSachGhe} />
+            </ContainerListChair>
+            <InfoTheater>
+              <InfoTicket
+                ticketInfo={tickets.thongTinPhim}
+                id={id}
+                setLoading={setLoading}
+              />
+            </InfoTheater>
+          </>
+        )}
       </ContainerTicket>
     </Container>
   );

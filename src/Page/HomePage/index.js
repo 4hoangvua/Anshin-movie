@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import SearchMovie from "./SearchMovie";
 import NavBar from "./NavBar";
@@ -8,6 +8,7 @@ import { getMovieBanner } from "../../reducers/banner";
 import { getListMovie } from "../../reducers/listMovie";
 import { getShowTimeTheaterInfo } from "../../reducers/showTime";
 import ShowTimes from "./ShowTimes";
+import PageLoad from "../../components/PageLoad";
 import {
   Container,
   ContainerHome,
@@ -19,12 +20,19 @@ import {
   ContainerShowTime,
 } from "./HomePageElement";
 const HomePage = () => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getMovieBanner());
-    dispatch(getListMovie());
-
-    dispatch(getShowTimeTheaterInfo());
+    const featchData = async () => {
+      setLoading(true);
+      const [ban, list, showt] = await Promise.all([
+        dispatch(getMovieBanner()),
+        dispatch(getListMovie()),
+        dispatch(getShowTimeTheaterInfo()),
+      ]);
+      setLoading(false);
+    };
+    featchData();
   }, []);
   return (
     <>
@@ -36,18 +44,12 @@ const HomePage = () => {
               <LeftSide>
                 <Sidebar />
               </LeftSide>
-              <LeftPage>
-                <ContentPage />
-              </LeftPage>
+              <LeftPage>{loading ? <PageLoad /> : <ContentPage />}</LeftPage>
             </LeftContent>
           </LeftHome>
-          <RightHome>
-            <SearchMovie />
-          </RightHome>
+          <RightHome>{loading ? "" : <SearchMovie />}</RightHome>
         </ContainerHome>
-        <ContainerShowTime>
-          <ShowTimes />
-        </ContainerShowTime>
+        <ContainerShowTime>{loading ? "" : <ShowTimes />}</ContainerShowTime>
       </Container>
     </>
   );
